@@ -15,4 +15,5 @@ module.exports = {
     'BiDijkstraFinder'          : require('./finders/BiDijkstraFinder'),
     'IDAStarFinder'             : require('./finders/IDAStarFinder'),
     'JumpPointFinder'           : require('./finders/JumpPointFinder'),
+    'PotentialFieldFinder'      : require('./finders/PotentialFieldFinder')
 };

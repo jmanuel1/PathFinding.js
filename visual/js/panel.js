@@ -26,13 +26,33 @@ var Panel = {
      */
     getFinder: function() {
         var finder, selected_header, heuristic, allowDiagonal, biDirectional, dontCrossCorners, weight, trackRecursion, timeLimit;
-        
+
         selected_header = $(
             '#algorithm_panel ' +
             '.ui-accordion-header[aria-selected=true]'
         ).attr('id');
-        
+
         switch (selected_header) {
+
+
+            case 'field_header':
+                allowDiagonal = typeof $('#field_section ' +
+                                         '.allow_diagonal:checked').val() !== 'undefined';
+                dontCrossCorners = typeof $('#field_section ' +
+                                         '.dont_cross_corners:checked').val() !=='undefined';
+
+                /* parseInt returns NaN (which is falsy) if the string can't be parsed */
+                weight = parseInt($('#field_section .spinner').val()) || 1;
+                weight = weight >= 1 ? weight : 1; /* if negative or 0, use 1 */
+
+                heuristic = $('input[name=field_heuristic]:checked').val();
+                finder = new PF.PotentialFieldFinder({
+                    allowDiagonal: allowDiagonal,
+                    dontCrossCorners: dontCrossCorners,
+                    heuristic: PF.Heuristic[heuristic],
+                    weight: weight
+                });
+                break;
 
         case 'astar_header':
             allowDiagonal = typeof $('#astar_section ' +
@@ -131,7 +151,7 @@ var Panel = {
             trackRecursion = typeof $('#jump_point_section ' +
                                      '.track_recursion:checked').val() !== 'undefined';
             heuristic = $('input[name=jump_point_heuristic]:checked').val();
-            
+
             finder = new PF.JumpPointFinder({
               trackJumpRecursion: trackRecursion,
               heuristic: PF.Heuristic[heuristic],
